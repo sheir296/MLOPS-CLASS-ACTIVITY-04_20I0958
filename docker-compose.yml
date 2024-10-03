@@ -1,0 +1,28 @@
+version: '3'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src  # Enables live-reload
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app  # Enables live-reload
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/myappdb  # MongoDB connection string
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./database:/data/db  # Persistent data storage
